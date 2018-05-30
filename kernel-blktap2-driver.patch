@@ -1,8 +1,25 @@
+diff -uNr a/drivers/block/Kconfig b/drivers/block/Kconfig
+--- a/drivers/block/Kconfig	2018-05-09 07:53:14.000000000 +0000
++++ b/drivers/block/Kconfig	2018-05-30 14:29:50.643737000 +0000
+@@ -481,4 +481,13 @@
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called rsxx.
+ 
++config BLK_DEV_TAP
++       tristate "Blktap userspace devices"
++       help
++         The block tap driver allows block device requests to be
++         redirected to processes, through a device interface.
++         Doing so allows user-space development of high-performance
++         block storage backends, where disk images may be implemented
++         as files, in memory, or on other hosts across the network.
++
+ endif # BLK_DEV
 diff -uNr a/drivers/block/blktap2/Makefile b/drivers/block/blktap2/Makefile
 --- a/drivers/block/blktap2/Makefile	1970-01-01 00:00:00.000000000 +0000
-+++ b/drivers/block/blktap2/Makefile	2018-05-30 12:19:30.823737000 +0000
++++ b/drivers/block/blktap2/Makefile	2018-05-30 14:31:08.479737000 +0000
 @@ -0,0 +1,7 @@
-+obj-y := blktap.o
++obj-$(CONFIG_BLK_DEV_TAP) := blktap.o
 +
 +blktap-objs := control.o
 +blktap-objs += ring.o
@@ -1168,8 +1185,8 @@ diff -uNr a/drivers/block/blktap2/device.c b/drivers/block/blktap2/device.c
 +}
 diff -uNr a/drivers/block/blktap2/request.c b/drivers/block/blktap2/request.c
 --- a/drivers/block/blktap2/request.c	1970-01-01 00:00:00.000000000 +0000
-+++ b/drivers/block/blktap2/request.c	2018-05-30 12:09:41.227737000 +0000
-@@ -0,0 +1,473 @@
++++ b/drivers/block/blktap2/request.c	2018-05-30 14:32:42.799737000 +0000
+@@ -0,0 +1,474 @@
 +#include <linux/mempool.h>
 +#include <linux/spinlock.h>
 +#include <linux/mutex.h>
@@ -1505,7 +1522,8 @@ diff -uNr a/drivers/block/blktap2/request.c b/drivers/block/blktap2/request.c
 +{
 +	struct page *page;
 +
-+	/*if (!(gfp_mask & __GFP_RECLAIM))
++	// TODO
++	/*if (!(gfp_mask & __GFP_WAIT))
 +	if (!(gfp_mask))
 +		return NULL;*/
 +
