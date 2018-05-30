@@ -15,6 +15,16 @@ diff -uNr a/drivers/block/Kconfig b/drivers/block/Kconfig
 +         as files, in memory, or on other hosts across the network.
 +
  endif # BLK_DEV
+diff -uNr a/drivers/block/Makefile b/drivers/block/Makefile
+--- a/drivers/block/Makefile	2018-05-09 07:53:14.000000000 +0000
++++ b/drivers/block/Makefile	2018-05-30 14:49:19.863737000 +0000
+@@ -41,3 +41,6 @@
+ 
+ skd-y		:= skd_main.o
+ swim_mod-y	:= swim.o swim_asm.o
++
++obj-$(CONFIG_BLK_DEV_TAP)       += blktap2/
++
 diff -uNr a/drivers/block/blktap2/Makefile b/drivers/block/blktap2/Makefile
 --- a/drivers/block/blktap2/Makefile	1970-01-01 00:00:00.000000000 +0000
 +++ b/drivers/block/blktap2/Makefile	2018-05-30 14:31:08.479737000 +0000
